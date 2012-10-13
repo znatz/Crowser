@@ -1,0 +1,7 @@
+#ifndef HtmlBodyH
+#define HtmlBodyH
+
+class HtmlBody {
+};
+
+#endif /* #ifndef HtmlBodyH */
