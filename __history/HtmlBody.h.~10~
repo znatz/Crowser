@@ -17,7 +17,6 @@ struct TAGPROPERTY
 struct TAG
 {
 	UnicodeString 	TagName;
-	UnicodeString 	TagString;
 	TAGPROPERTY     *TagPro;
 	int LStartPos;
 	int NameEndPos;

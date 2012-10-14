@@ -33,19 +33,17 @@ do
 	{
 		// Fill all fields
 		tempRoot->LStartPos    = tempBody.Pos("<");
+		tempRoot->NameEndPos   = tempBody.Pos(" ");
 		tempRoot->LEndPos      = tempBody.Pos(">");
-		tempRoot->TagString	   = tempBody.SubString(tempRoot->LStartPos,tempRoot->LEndPos-tempRoot->LStartPos-1);
-		tempRoot->NameEndPos   = tempRoot->TagString.Pos(" ");
+
 		// Fill tag name
-		if (tempRoot->NameEndPos == 0)
+		if (tempRoot->NameEndPos > tempRoot->LEndPos)
 		{
-			tempRoot->TagName  	 = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->LEndPos-tempRoot->LStartPos-1);
+			tempRoot->NameEndPos = tempRoot->LEndPos;
 		}
-		else
-		{
-			tempRoot->TagName  	 = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->NameEndPos - tempRoot->LStartPos-1);
-		}
-		// Find what is inside the tag
+		tempRoot->TagName  	 = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->NameEndPos-tempRoot->LStartPos-1);
+
+		// Find inside
 		tempRoot->RStartPos  = tempBody.Pos("</"+tempRoot->TagName+">");
 		if (tempRoot->RStartPos!=0)
 		{
@@ -73,12 +71,4 @@ Host:localhost
 Connection:close
 
 
-*/
-
-/*
-    < : LS
-    > : LE
-    space inside <> : NameEnd
-    </: RS
-    > : RE
 */

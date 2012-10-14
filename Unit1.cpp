@@ -170,6 +170,14 @@ Fm->BodyREdit->SelAttributes = textAttrib;
 
 // Try to destruct body here
 Report(0, Content.bStruct->TagName);
+Report(0, Content.bStruct->Next->TagName);
+
+	Report(Content.bStruct->Next->LStartPos, 	"LStartPos");
+	Report(Content.bStruct->Next->NameEndPos, "NameEndPos");
+	Report(Content.bStruct->Next->LEndPos, 	"LEndPos");
+	Report(Content.bStruct->Next->RStartPos, 	"RStartPos");
+	Report(Content.bStruct->Next->REndPos, 	"REndPos");
+
 
 
 // Save the content or not according to the type of the content
