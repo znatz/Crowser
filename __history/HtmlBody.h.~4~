@@ -17,7 +17,7 @@ struct TagProperty
 struct Tag
 {
 	UnicodeString 	TagName;
-	TagProperty*	TagPro;
+	TagProperty		TagPro;
 };
 
 
@@ -39,7 +39,7 @@ class HtmlBody
 
 		// Here is the string created from the stream strstr
 		UnicodeString cBody;
-		BodyStruct*	  cBodyStruct;
+		BodyStruct	  cBodyStruct;
 		// The length of the stream
 		int bodySize;
 

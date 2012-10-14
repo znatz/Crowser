@@ -25,5 +25,4 @@ void HtmlBody::Destruct()
 {
 	cBodyStruct 			= new BodyStruct;
 	BodyStruct* tempRoot	= new BodyStruct;
-	BodyStruct* tempList;
 }

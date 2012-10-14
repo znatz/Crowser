@@ -157,7 +157,7 @@ void ConnectIt()
 	};
 
 // Show the body in the BodyEdt from TStr.
-//Fm->BodyEdt->Text=Content.cBody;
+Fm->BodyEdt->Text=Content.cBody;
 
 /* Fill RichEdit with text.
    Select the necessary part.
@@ -195,7 +195,7 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	if (RspHdr.cType!=".html") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
-   	Image2->Left = 600;
+   	Image2->Left = 400;
 	Image2->Top  = 200;
 	Image2->Picture->LoadFromFile(filename);
 	}
