@@ -23,13 +23,13 @@ void HtmlBody::SaveToFile(UnicodeString fn)
 
 void HtmlBody::Destruct()
 {
-	bStruct  		= new TAG;
+	bStruct  	= new TAG;
 	TAG	*tempRoot	= new TAG;
 	TAG	*tempList;
 	int tempPos;
 	UnicodeString tempBody = cBody;
-//do
-//	{
+do
+	{
 		bStruct->LStartPos 	= tempBody.Pos("<");
 		bStruct->NameEndPos	= tempBody.Pos(" ");
 		bStruct->LEndPos    = tempBody.Pos(">");
@@ -39,5 +39,5 @@ void HtmlBody::Destruct()
 		{
 		  bStruct->REndPos	= bStruct->RStartPos + bStruct->TagName.Length() + 2;
 		}
-//	}while();
+	}while();
 }

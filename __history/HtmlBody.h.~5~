@@ -6,26 +6,27 @@
 #include <Vcl.StdCtrls.hpp>
 #include <Vcl.Forms.hpp>
 
-struct TAGPROPERTY
+struct TagProperty
 {
 	UnicodeString 	TagPara;
 	UnicodeString 	TagVal;
-	TAGPROPERTY    	*next;
+	TagProperty    	*next;
 };
 
 
-struct TAG
+struct Tag
 {
 	UnicodeString 	TagName;
-	TAGPROPERTY     *TagPro;
-	int LStartPos;
-	int NameEndPos;
-	int LEndPos;
-	int RStartPos;
-	int REndPos;
-	TAG   			*Tag;
+	TagProperty*	TagPro;
 };
 
+
+struct BodyStruct
+{
+	 Tag 			BodyTag;
+	 UnicodeString 	BodyIn;
+	 BodyStruct* 	next;
+};
 
 class HtmlBody
 {
@@ -38,7 +39,7 @@ class HtmlBody
 
 		// Here is the string created from the stream strstr
 		UnicodeString cBody;
-		TAG*	  	  bStruct;
+		BodyStruct*	  cBodyStruct;
 		// The length of the stream
 		int bodySize;
 

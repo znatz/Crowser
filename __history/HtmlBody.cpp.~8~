@@ -23,7 +23,7 @@ void HtmlBody::SaveToFile(UnicodeString fn)
 
 void HtmlBody::Destruct()
 {
-	bStruct  		= new TAG;
+	bStruct  	= new TAG;
 	TAG	*tempRoot	= new TAG;
 	TAG	*tempList;
 	int tempPos;

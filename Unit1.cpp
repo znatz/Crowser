@@ -156,8 +156,7 @@ void ConnectIt()
 		WSACleanup();
 	};
 
-// Show the body in the BodyEdt from TStr.
-//Fm->BodyEdt->Text=Content.cBody;
+
 
 /* Fill RichEdit with text.
    Select the necessary part.
@@ -169,6 +168,8 @@ TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
 textAttrib->Color = StringToColor(clBlue);
 Fm->BodyREdit->SelAttributes = textAttrib;
 
+// Try to destruct body here
+Report(0, Content.bStruct->TagName);
 
 
 // Save the content or not according to the type of the content
