@@ -156,29 +156,29 @@ void ConnectIt()
 		WSACleanup();
 	};
 
+if (RspHdr.cType==".html")
+{
+	/* Fill RichEdit with text.
+	   Select the necessary part.
+	   Change the selected part to what you want*/
+	Fm->BodyREdit->SelText=Content.cBody;
+	Fm->BodyREdit->SelStart = 100;
+	Fm->BodyREdit->SelLength = 300;
+	TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
+	textAttrib->Color = StringToColor(clBlue);
+	Fm->BodyREdit->SelAttributes = textAttrib;
 
+	// Try to destruct body here
+	Report(0, Content.bStruct->TagName);
+	Report(0, Content.bStruct->Next->TagName);
+	Report(0, Content.bStruct->Next->Next->TagName);
 
-/* Fill RichEdit with text.
-   Select the necessary part.
-   Change the selected part to what you want*/
-Fm->BodyREdit->SelText=Content.cBody;
-Fm->BodyREdit->SelStart = 100;
-Fm->BodyREdit->SelLength = 300;
-TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
-textAttrib->Color = StringToColor(clBlue);
-Fm->BodyREdit->SelAttributes = textAttrib;
-
-// Try to destruct body here
-Report(0, Content.bStruct->TagName);
-Report(0, Content.bStruct->Next->TagName);
-
-	Report(Content.bStruct->Next->LStartPos, 	"LStartPos");
-	Report(Content.bStruct->Next->NameEndPos, "NameEndPos");
-	Report(Content.bStruct->Next->LEndPos, 	"LEndPos");
-	Report(Content.bStruct->Next->RStartPos, 	"RStartPos");
-	Report(Content.bStruct->Next->REndPos, 	"REndPos");
-
-
+	TAG* iterate;
+	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next) {
+		Report(0,iterate->TagName);
+		Report(0,iterate->TagString);
+	}
+}
 
 // Save the content or not according to the type of the content
 if (RspHdr.cType!=".html")

@@ -35,7 +35,7 @@ do
 		// Fill all fields
 		tempRoot->LStartPos    = tempBody.Pos("<");
 		tempRoot->LEndPos      = tempBody.Pos(">");
-		tempRoot->TagString	   = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->LEndPos-tempRoot->LStartPos-1);
+		tempRoot->TagString	   = tempBody.SubString(tempRoot->LStartPos,tempRoot->LEndPos-tempRoot->LStartPos-1);
 		tempRoot->NameEndPos   = tempRoot->TagString.Pos(" ");
 		// Fill tag name
 		if (tempRoot->NameEndPos == 0)

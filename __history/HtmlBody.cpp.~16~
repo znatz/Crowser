@@ -24,7 +24,6 @@ void HtmlBody::SaveToFile(UnicodeString fn)
 void HtmlBody::Destruct()
 {
 	bStruct  		= new TAG;
-	bStruct->Next	= NULL;
 	TAG	*tempRoot	= new TAG;
 	int tempPos;
 	UnicodeString tempBody = cBody;
@@ -35,7 +34,7 @@ do
 		// Fill all fields
 		tempRoot->LStartPos    = tempBody.Pos("<");
 		tempRoot->LEndPos      = tempBody.Pos(">");
-		tempRoot->TagString	   = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->LEndPos-tempRoot->LStartPos-1);
+		tempRoot->TagString	   = tempBody.SubString(tempRoot->LStartPos,tempRoot->LEndPos-tempRoot->LStartPos-1);
 		tempRoot->NameEndPos   = tempRoot->TagString.Pos(" ");
 		// Fill tag name
 		if (tempRoot->NameEndPos == 0)
@@ -60,7 +59,6 @@ do
 		 }
 		 // Link to next
 		 TAG	*tempList	= new TAG;
-		 tempList->Next		= NULL;
 		 tempRoot->Next		= tempList;
 		 tempRoot			= tempList;
 
