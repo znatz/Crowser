@@ -92,9 +92,9 @@ object Fm: TFm
     TabOrder = 5
   end
   object Err: TMemo
-    Left = 152
+    Left = 375
     Top = 63
-    Width = 408
+    Width = 185
     Height = 130
     Anchors = [akLeft, akTop, akRight, akBottom]
     ImeName = 'Google Japanese Input'
@@ -118,7 +118,7 @@ object Fm: TFm
   object RqstHdr: TMemo
     Left = 8
     Top = 63
-    Width = 129
+    Width = 361
     Height = 130
     Anchors = [akLeft, akTop, akRight, akBottom]
     ImeName = 'Google Japanese Input'

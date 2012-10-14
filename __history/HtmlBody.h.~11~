@@ -25,7 +25,6 @@ struct TAG
 	int RStartPos;
 	int REndPos;
 	TAG   			*Next;
-	TAG				*Friend;
 };
 
 
@@ -48,7 +47,7 @@ class HtmlBody
 		// Holdes the stringstream received from initiator
 		TStringStream* StrStr;
 		// Destruct body
-		void Destruct(TAG*, UnicodeString);
+		void Destruct();
 };
 #endif /* #ifndef Class1H */
 

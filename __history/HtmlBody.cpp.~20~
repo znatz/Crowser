@@ -15,7 +15,6 @@ void HtmlBody::SetBody(char* buff, int startPos,int endPos)
 	bodySize += endPos-startPos;
 	bStruct  		= new TAG;
 	bStruct->Next	= NULL;
-	bStruct->Friend	= NULL;
 	Destruct(bStruct,cBody);
 }
 
@@ -29,7 +28,6 @@ void HtmlBody::Destruct(TAG* _bStruct, UnicodeString _cBody)
 	TAG	*tempRoot	= new TAG;
 	int tempPos;
 	UnicodeString tempBody = _cBody;
-	UnicodeString friendBody;
 	tempRoot		= _bStruct;
 
 do
@@ -53,18 +51,7 @@ do
 		if (tempRoot->RStartPos!=0)
 		{
 		  tempRoot->REndPos	= tempRoot->RStartPos + tempRoot->TagName.Length() + 2;
-
-		  // !!!!!!!! TODO: if tempRoot->REndPos != _tempBody.length(); it means friendBody Existed
-			if (tempRoot->REndPos < tempBody.Length())
-			{
-			  friendBody 	= tempBody.SubString(tempRoot->REndPos+1,tempBody.Length()-tempRoot->REndPos-1);
-			  tempRoot->Friend	= new TAG;
-			  tempRoot->Friend->Next=NULL;
-			  tempRoot->Friend->Friend=NULL;
-			  Destruct(tempRoot->Friend,friendBody);
-			}
-		  //_______________________________________________________________________________________
-			 tempBody 			= tempBody.SubString(tempRoot->LEndPos+1,tempRoot->RStartPos-tempRoot->LEndPos-1);
+		  tempBody 			= tempBody.SubString(tempRoot->LEndPos+1,tempRoot->RStartPos-tempRoot->LEndPos-1);
 		}
 		else
 		{

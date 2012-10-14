@@ -59,8 +59,6 @@ do
 			{
 			  friendBody 	= tempBody.SubString(tempRoot->REndPos+1,tempBody.Length()-tempRoot->REndPos-1);
 			  tempRoot->Friend	= new TAG;
-			  tempRoot->Friend->Next=NULL;
-			  tempRoot->Friend->Friend=NULL;
 			  Destruct(tempRoot->Friend,friendBody);
 			}
 		  //_______________________________________________________________________________________
