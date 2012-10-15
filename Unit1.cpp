@@ -183,6 +183,10 @@ if (RspHdr.cType==".html")
 				TAG* ip;
 				for (ip=p->Next; ip!=NULL; ip=ip->Next) {
 					Report (0,"    Next is "+ ip->TagName);
+					TAG* iq;
+					for (iq=ip->Friend; iq!=NULL; iq=iq->Friend) {
+                        Report	(0, "          Subfriend is " + iq->TagName);
+					}
 				}
 			}
 		}
