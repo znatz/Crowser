@@ -48,13 +48,13 @@ do
 		// Fill tag name
 		if (tempRoot->NameEndPos == 0)
 		{
-			tempRoot->TagName  	 = tempRoot->TagString;
+			tempRoot->TagName  	 = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->LEndPos-tempRoot->LStartPos-1);
 		}
 		else
 		{
 			// TODO : Have to sovle this problem:  string string <tagname para> the space
 			// The lenght of the substring need NOT minus 1, becuase the "<"  has been removed before calculated.
-			tempRoot->TagName  	 = tempRoot->TagString.SubString(1, tempRoot->NameEndPos-1);
+			tempRoot->TagName  	 = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->NameEndPos - tempRoot->LStartPos);
 		}
 		// Find what is inside the tag
 		tempRoot->RStartPos  = tempBody.Pos("</"+tempRoot->TagName+">");
