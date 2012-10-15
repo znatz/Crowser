@@ -175,13 +175,13 @@ if (RspHdr.cType==".html")
 	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next) {
 		Report(0,"Inside " + iterate->TagName+" Tag: " + iterate->TagString);
 		if (iterate->Friend!=NULL) {
-			Report(0,iterate->TagName+" has friend " + iterate->Friend->TagName);
+			//Report(0,iterate->TagName+" has friend " + iterate->Friend->TagName);
 			TAG* p;
 			for (p=iterate->Friend; p!= NULL; p = p->Friend)
 			{
 				Report (0,"  Friend is " + p->TagName);
 				TAG* ip;
-				for (ip=p; ip!=NULL; ip=ip->Next) {
+				for (ip=p->Next; ip!=NULL; ip=ip->Next) {
 					Report (0,"    Next is "+ ip->TagName);
 				}
 			}

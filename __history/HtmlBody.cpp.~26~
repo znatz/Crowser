@@ -66,17 +66,10 @@ do
 			if (tempRoot->REndPos < tempBody.Length())
 			{
 			  friendBody 	= tempBody.SubString(tempRoot->REndPos+1,tempBody.Length()-tempRoot->REndPos-1);
-
-  /*
-        			  tempRoot->Friend	= new TAG;
-     				  tempRoot->Friend->Next=NULL;
-					  tempRoot->Friend->Friend=NULL;       
- */ 
-			  TAG *tempFriend = new TAG;
-			  tempFriend->Next=NULL;
-			  tempFriend->Friend=NULL;
-			  Destruct(tempFriend,friendBody);
-			  tempRoot->Friend=tempFriend;
+			  tempRoot->Friend	= new TAG;
+			  tempRoot->Friend->Next=NULL;
+			  tempRoot->Friend->Friend=NULL;
+			  Destruct(tempRoot->Friend,friendBody);
 			}
 		  //_______________________________________________________________________________________
 			 tempBody 			= tempBody.SubString(tempRoot->LEndPos+1,tempRoot->RStartPos-tempRoot->LEndPos-1);
