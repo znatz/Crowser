@@ -156,20 +156,34 @@ void ConnectIt()
 		WSACleanup();
 	};
 
-// Show the body in the BodyEdt from TStr.
-Fm->BodyEdt->Text=Content.cBody;
+if (RspHdr.cType==".html")
+{
+	/* Fill RichEdit with text.
+	   Select the necessary part.
+	   Change the selected part to what you want*/
+	Fm->BodyREdit->SelText=Content.cBody;
+	Fm->BodyREdit->SelStart = 100;
+	Fm->BodyREdit->SelLength = 300;
+	TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
+	textAttrib->Color = StringToColor(clBlue);
+	Fm->BodyREdit->SelAttributes = textAttrib;
 
-/* Fill RichEdit with text.
-   Select the necessary part.
-   Change the selected part to what you want*/
-Fm->BodyREdit->SelText=Content.cBody;
-Fm->BodyREdit->SelStart = 100;
-Fm->BodyREdit->SelLength = 300;
-TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
-textAttrib->Color = StringToColor(clBlue);
-Fm->BodyREdit->SelAttributes = textAttrib;
-
-
+	// Try to destruct body here
+	TAG* iterate;
+	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next) {
+		Report(0,"Inside "+iterate->TagName+" Tag: " + iterate->TagString);
+		if (iterate->Friend!=NULL) {
+			TAG* p;
+			for (p=iterate->Friend; p!= NULL; p = p->Friend) {
+				Report (1,p->TagName);
+				TAG* ip;
+				for (ip=p; ip!=NULL; ip=ip->Next) {
+                    Report(2, ip->TagName);
+				}
+			}
+		}
+	}
+}
 
 // Save the content or not according to the type of the content
 if (RspHdr.cType!=".html")
@@ -195,7 +209,7 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 	if (RspHdr.cType!=".html") {
 	TImage* Image2 = new TImage(Fm);
 	Image2->Parent = Fm;
-   	Image2->Left = 400;
+   	Image2->Left = 600;
 	Image2->Top  = 200;
 	Image2->Picture->LoadFromFile(filename);
 	}

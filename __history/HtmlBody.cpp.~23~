@@ -47,8 +47,7 @@ do
 		else
 		{
 			// TODO : Have to sovle this problem:  string string <tagname para> the space
-			// The lenght of the substring need NOT minus 1, becuase the "<"  has been removed before calculated.
-			tempRoot->TagName  	 = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->NameEndPos - tempRoot->LStartPos);
+			tempRoot->TagName  	 = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->NameEndPos - tempRoot->LStartPos-1);
 		}
 		// Find what is inside the tag
 		tempRoot->RStartPos  = tempBody.Pos("</"+tempRoot->TagName+">");
@@ -72,12 +71,6 @@ do
 		{
 		  tempRoot->RStartPos	= tempBody.Length();
 		  tempBody				= tempBody.SubString(tempRoot->LEndPos+1,tempRoot->RStartPos-tempRoot->LEndPos-1);
-		 }
-		 // Cut of the content before the <Tagname>
-		 tempPos 	= tempBody.Length();
-		 if (tempBody.Pos("<")!=0)
-		 {
-			tempBody 	= tempBody.SubString(tempBody.Pos("<"), tempPos-tempBody.Pos("<")-1);
 		 }
 		 // Link to next
 		 TAG	*tempList	= new TAG;
