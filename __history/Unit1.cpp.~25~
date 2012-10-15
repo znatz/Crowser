@@ -169,15 +169,50 @@ if (RspHdr.cType==".html")
 	Fm->BodyREdit->SelAttributes = textAttrib;
 
 	// Try to destruct body here
-	Report(0, Content.bStruct->TagName);
-	Report(0, Content.bStruct->Next->TagName);
-	Report(0, Content.bStruct->Next->Next->TagName);
-
-	TAG* iterate;
-	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next) {
-		Report(0,iterate->TagName);
-		Report(0,iterate->TagString);
-	}
+//	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
+	Content.ExamBody();
+/*
+    	TAG *iterate;
+    	iterate=Content.bStruct;
+    	TAG *rootHolder[][];
+    	int preindex = 0;
+    	int index = 0;
+    	int level = 0;
+    	rootHolder[level][preindex]=iterate;
+    	do
+    	{
+    	   level++;
+    	   do {
+    	   rootHolder[level][index]=rootHolder[level-1][preindex]->Next;
+    	   index++;
+    	   rootHolder[level][index]=rootHolder[level-1][preindex]->Friend;
+    	   }while(preindex!=max);
+    	   index=0;
+    	}
+*/
+/*
+    	TAG* iterate;
+    	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next)
+    	 {
+    		Report(0,"Inside " + iterate->TagName+" Tag: " + iterate->TagString);
+    		if (iterate->Friend!=NULL) {
+    			//Report(0,iterate->TagName+" has friend " + iterate->Friend->TagName);
+    			TAG* p;
+    			for (p=iterate->Friend; p!= NULL; p = p->Friend)
+    			{
+    				Report (0,"  Friend is " + p->TagName);
+    				TAG* ip;
+    				for (ip=p->Next; ip!=NULL; ip=ip->Next) {
+    					Report (0,"    Next is "+ ip->TagName);
+    					TAG* iq;
+    					for (iq=ip->Friend; iq!=NULL; iq=iq->Friend) {
+    						Report	(0, "          Subfriend is " + iq->TagName);
+    					}
+    				}
+    			}
+    		}
+		}
+*/
 }
 
 // Save the content or not according to the type of the content

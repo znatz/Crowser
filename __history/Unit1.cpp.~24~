@@ -169,13 +169,25 @@ if (RspHdr.cType==".html")
 	Fm->BodyREdit->SelAttributes = textAttrib;
 
 	// Try to destruct body here
+//	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
+	Content.ExamBody();
 	TAG* iterate;
 	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next) {
-		Report(0,"Inside "+iterate->TagName+" Tag: " + iterate->TagString);
+		Report(0,"Inside " + iterate->TagName+" Tag: " + iterate->TagString);
 		if (iterate->Friend!=NULL) {
+			//Report(0,iterate->TagName+" has friend " + iterate->Friend->TagName);
 			TAG* p;
-			for (p=iterate->Friend; p!= NULL; p = p->Next) {
-                Report (1,p->TagName);
+			for (p=iterate->Friend; p!= NULL; p = p->Friend)
+			{
+				Report (0,"  Friend is " + p->TagName);
+				TAG* ip;
+				for (ip=p->Next; ip!=NULL; ip=ip->Next) {
+					Report (0,"    Next is "+ ip->TagName);
+					TAG* iq;
+					for (iq=ip->Friend; iq!=NULL; iq=iq->Friend) {
+                        Report	(0, "          Subfriend is " + iq->TagName);
+					}
+				}
 			}
 		}
 	}
