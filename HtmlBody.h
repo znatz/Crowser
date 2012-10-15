@@ -37,6 +37,7 @@ class HtmlBody
 		void SetBody(char*, int, int);
 		// Save the stream to file
 		void SaveToFile(UnicodeString fn);
+		void ExamBody();
 
 		// Here is the string created from the stream strstr
 		UnicodeString cBody;

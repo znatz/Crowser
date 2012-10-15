@@ -13,21 +13,15 @@ void HtmlBody::SetBody(char* buff, int startPos,int endPos)
 	StrStr->Write(&buff[startPos],endPos);
 	cBody = StrStr->DataString;
 	bodySize += endPos-startPos;
-
+	bStruct  		= new TAG;
+	bStruct->Next	= NULL;
+	bStruct->Friend	= NULL;
+	Destruct(bStruct,cBody);
 }
 
 void HtmlBody::SaveToFile(UnicodeString fn)
 {
 	StrStr->SaveToFile(fn);
-}
-
-void HtmlBody::ExamBody()
-{
-	bStruct  		= new TAG;
-	bStruct->Next	= NULL;
-	bStruct->Friend	= NULL;
-	Destruct(bStruct,cBody);
-
 }
 
 void HtmlBody::Destruct(TAG* _bStruct, UnicodeString _cBody)

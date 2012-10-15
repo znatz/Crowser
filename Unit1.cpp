@@ -169,7 +169,8 @@ if (RspHdr.cType==".html")
 	Fm->BodyREdit->SelAttributes = textAttrib;
 
 	// Try to destruct body here
-	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
+//	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
+	Content.ExamBody();
 	TAG* iterate;
 	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next) {
 		Report(0,"Inside "+iterate->TagName+" Tag: " + iterate->TagString);
