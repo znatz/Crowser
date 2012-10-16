@@ -67,6 +67,11 @@ do
 			{
 			  friendBody 	= tempBody.SubString(tempRoot->REndPos+1,tempBody.Length()-tempRoot->REndPos-1);
 
+  /*
+        			  tempRoot->Friend	= new TAG;
+     				  tempRoot->Friend->Next=NULL;
+					  tempRoot->Friend->Friend=NULL;       
+ */ 
 			  TAG *tempFriend = new TAG;
 			  tempFriend->Next=NULL;
 			  tempFriend->Friend=NULL;
@@ -90,7 +95,6 @@ do
 		 // Link to next
 		 TAG	*tempList	= new TAG;
 		 tempList->Next		= NULL;
-		 tempList->Friend	= NULL;
 		 tempRoot->Next		= tempList;
 		 tempRoot			= tempList;
 

@@ -174,32 +174,30 @@ if (RspHdr.cType==".html")
 //	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
 	Content.ExamBody();
 // !!!!!!!!!!!!!!!!!!!!!!!! TODO : Use Queue !!!!!!!!!!!!!!!!!!!!!!!
-tagQ->Push(Content.bStruct->Next);
-TAG* tempTry;
-tempTry = (TAG *)tagQ->Peek();
-Report(tagQ->Count(),"Hey, I can access the queue now!" + tempTry->TagName);
-//__________________________________________________________________
-		TAG* iterate;
-    	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next)
-    	 {
-    		Report(0,"Inside " + iterate->TagName+" Tag: " + iterate->TagString);
-    		if (iterate->Friend!=NULL) {
-    			//Report(0,iterate->TagName+" has friend " + iterate->Friend->TagName);
-    			TAG* p;
-    			for (p=iterate->Friend; p!= NULL; p = p->Friend)
-    			{
-    				Report (0,"  Friend is " + p->TagName);
-    				TAG* ip;
-    				for (ip=p->Next; ip!=NULL; ip=ip->Next) {
-    					Report (0,"    Next is "+ ip->TagName);
-    					TAG* iq;
-    					for (iq=ip->Friend; iq!=NULL; iq=iq->Friend) {
-    						Report	(0, "          Subfriend is " + iq->TagName);
-    					}
-    				}
-    			}
-    		}
+tagQ->Push(Content.bStruct);
+TAG * tempHolder = NULL;
+do
+{
+	tempHolder = (TAG *) tagQ->Pop();
+	Report(0,"Hey, I can access the queue now!" + tempHolder->TagName);
+	if (tempHolder!=NULL)
+	{
+		if (tempHolder->Next!=NULL)
+		{
+			tagQ->Push(tempHolder->Next);
 		}
+		if (tempHolder->Friend!=NULL)
+		{
+			tagQ->Push(tempHolder->Friend);
+		}
+		if (tempHolder->Next==NULL && tempHolder->Friend==NULL)
+		{
+			Report(0,"Both NULL");
+		}
+	}
+
+} while(tagQ->Count()>0);
+
 
 }
 

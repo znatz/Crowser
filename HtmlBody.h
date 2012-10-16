@@ -26,6 +26,7 @@ struct TAG
 	int REndPos;
 	TAG   			*Next;
 	TAG				*Friend;
+	bool			visited;	// For tag tree traversal
 };
 
 
