@@ -19,6 +19,7 @@ struct TAG
 	UnicodeString 	TagName;
 	UnicodeString 	TagString;
 	TAGPROPERTY     *TagPro;
+	int RelatedPos;
 	int LStartPos;
 	int NameEndPos;
 	int LEndPos;
@@ -26,7 +27,6 @@ struct TAG
 	int REndPos;
 	TAG   			*Next;
 	TAG				*Friend;
-	bool			visited;	// For tag tree traversal
 };
 
 

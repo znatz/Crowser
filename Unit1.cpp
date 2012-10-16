@@ -179,9 +179,10 @@ TAG * tempHolder = NULL;
 do
 {
 	tempHolder = (TAG *) tagQ->Pop();
-	Report(0,"Hey, I can access the queue now!" + tempHolder->TagName);
-	if (tempHolder!=NULL)
+
+	if (tempHolder!=NULL && tempHolder->TagName!=NULL )
 	{
+		Report(tempHolder->RelatedPos,"TAG: " + tempHolder->TagName+" HAS "+ tempHolder->TagString + " RPos ");
 		if (tempHolder->Next!=NULL)
 		{
 			tagQ->Push(tempHolder->Next);

@@ -38,7 +38,6 @@ void HtmlBody::Destruct(TAG* tempRoot, UnicodeString tempBody)
 do
 	{
 		// Fill all fields
-		tempRoot->RelatedPos   = cBody.Pos(tempBody);
 		tempRoot->LStartPos    = tempBody.Pos("<");
 		tempRoot->LEndPos      = tempBody.Pos(">");
 		tempRoot->TagString	   = tempBody.SubString(tempRoot->LStartPos+1,tempRoot->LEndPos-tempRoot->LStartPos-1);
@@ -64,7 +63,7 @@ do
 		  if (tempRoot->REndPos < tempBody.Length())
 			{
 			  friendBody 	= tempBody.SubString(tempRoot->REndPos+1,tempBody.Length()-tempRoot->REndPos-1);
-			  if (friendBody.Pos("<")!=0)
+			  if (friendBody!="\r\n" && friendBody!="\n" && friendBody!="\n\r\n")
 				{
 				  TAG *tempFriend = new TAG;
 				  tempFriend->Next=NULL;
@@ -90,14 +89,14 @@ do
 		 if (tempBody.Pos("<")!=0)
 		 {
 			tempBody 	= tempBody.SubString(tempBody.Pos("<"), tempPos-tempBody.Pos("<")-1);
-
+		 }
 		 // Link to next
 		 TAG	*tempList	= new TAG;
 		 tempList->Next		= NULL;
 		 tempList->Friend	= NULL;
 		 tempRoot->Next		= tempList;
 		 tempRoot			= tempList;
-         }
+
 
 	}while(tempBody.Pos("<")!=0);
 }
