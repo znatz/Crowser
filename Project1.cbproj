@@ -112,6 +112,10 @@
             <DependentOn>ResponseHeader.h</DependentOn>
             <BuildOrder>6</BuildOrder>
         </CppCompile>
+        <CppCompile Include="StringFunctions.cpp">
+            <DependentOn>StringFunctions.h</DependentOn>
+            <BuildOrder>8</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Unit1.cpp">
             <Form>Fm</Form>
             <FormType>dfm</FormType>

@@ -1,7 +1,7 @@
 #pragma hdrstop
 
 #include "HtmlBody.h"
-#include "StringFunctions.h"
+#include "StringFunctionis.h"
 
 HtmlBody::HtmlBody()
 {
@@ -36,14 +36,13 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 
 	int tempPos;
 	UnicodeString frBody;
-	UnicodeString endTag;	// </ + tagname + >
 do
 	{
 		// Fill all fields
 		Root->RelatedPos   = cBody.Pos(Body);
 		Root->LStartPos    = Body.Pos("<");
 		Root->LEndPos      = Body.Pos(">");
-		Root->TagString	   = Within(Body,"<",">");  // ????? Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
+		Root->TagString	   = Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
 
 		// Find name in tag
 		Root->NameEndPos   = Root->TagString.Pos(" ");
@@ -53,11 +52,10 @@ do
 		}
 		else							   // <tagname para=val>
 		{
-			Root->TagName  = Within(Root->TagString,"<"," ");
+			Root->TagName  	= Root->TagString.SubString(1, Root->NameEndPos-1);
 		}
 		// Find string within the tag
-		endTag			 = "</"	+ Root->TagName + ">";
-		Root->RStartPos  = Body.Pos(endTag);
+		Root->RStartPos  = Body.Pos("</"+Root->TagName+">");
 		if (Root->RStartPos!=0)
 		{
 		  Root->REndPos	= Root->RStartPos + Root->TagName.Length() + 2;
@@ -65,7 +63,7 @@ do
 		  // !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
 		  if (Root->REndPos < Body.Length())
 			{
-			  frBody   = AfterTail(Body,endTag);
+			  frBody 	= Body.SubString(Root->REndPos+1,Body.Length()-Root->REndPos-1);
 			  if (frBody.Pos("<")!=0)
 				{
 				  TAG *newFd 	= new TAG;
@@ -75,12 +73,13 @@ do
 				  Root->Friend	= newFd;
 				}
 			}
-			 Body	= Within(Body,Root->TagName,endTag);
+		  //_______________________________________________________________________________________
+			 Body 			= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
 		}
 		else
 		{
 		  Root->RStartPos	= Body.Length();
-		  Body	= AfterTail(Body,Root->TagName);
+		  Body				= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
 		 }
 		 //________________________________
 

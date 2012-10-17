@@ -43,7 +43,7 @@ do
 		Root->RelatedPos   = cBody.Pos(Body);
 		Root->LStartPos    = Body.Pos("<");
 		Root->LEndPos      = Body.Pos(">");
-		Root->TagString	   = Within(Body,"<",">");  // ????? Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
+		Root->TagString	   = Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
 
 		// Find name in tag
 		Root->NameEndPos   = Root->TagString.Pos(" ");
@@ -80,7 +80,7 @@ do
 		else
 		{
 		  Root->RStartPos	= Body.Length();
-		  Body	= AfterTail(Body,Root->TagName);
+		  Body				= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
 		 }
 		 //________________________________
 
