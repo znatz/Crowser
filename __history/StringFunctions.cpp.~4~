@@ -44,18 +44,18 @@ int CountPart(UnicodeString body,UnicodeString part)
 // Return the str with in head and tail. Body: headstrtail
 UnicodeString Within(UnicodeString body,UnicodeString head, UnicodeString tail)
 {
-	UnicodeString temp = body;
 	if (head!=tail)
 	{
-		temp = temp.SubString(body.Pos(head)+head.Length(), body.Pos(tail)-body.Pos(head)-head.Length());
+		return body.SubString(body.Pos(head)+head.Length(), body.Pos(tail)-body.Pos(head)-head.Length());
 	}
 	else if (head==tail)
 	{
-		temp = temp.Delete(1,temp.Pos(head)-1);
-		temp = temp.Delete(1,head.Length());
-		temp = temp.Delete(temp.Pos(tail),temp.Length()-temp.Pos(tail)+1);
+		UnicodeString temp = body;
+		temp.Delete(1,temp.Pos(head)-1);
+		temp.Delete(1,head.Length());
+		temp.Delete(temp.Pos(tail),temp.Length()-temp.Pos(tail)+1);
+		return temp;
 	}
-	return temp;
 }
 
 // Return the position of the ending char of part in body.
@@ -64,7 +64,7 @@ int EPos(UnicodeString body, UnicodeString part)
 	return body.Pos(part)+ part.Length()-1;
 }
 
-// Return str after the tail. tailstr
+// Return str after the tail.
 UnicodeString AfterTail(UnicodeString body, UnicodeString tail)
 {
 	return body.SubString(EPos(body,tail)+1,body.Length()-EPos(body,tail)-1);
@@ -73,23 +73,23 @@ UnicodeString AfterTail(UnicodeString body, UnicodeString tail)
 // Return str after head and before the Nth tail.
 UnicodeString WithinTails(UnicodeString body,UnicodeString head, UnicodeString tail, int tailIndex)
 {
+	int count= 0;
 	UnicodeString temp = body;
 	if (CountPart(body,tail)==0)
 	{
-		temp = body;
+		return body;
 	}
 	else if (CountPart(body,tail)==1)
 	{
-		temp = Within(body,head,tail);
+		return Within(body,head,tail);
 	 }
 	 else if (CountPart(body, tail)>1)
 	 {
-		temp = body.SubString(body.Pos(head)+head.Length(), Search(body,tail,tailIndex)-body.Pos(head)-head.Length() );
+		return body.SubString(body.Pos(head)+head.Length(), Search(body,tail,tailIndex)-body.Pos(head)-head.Length() );
 	  }
-	  return temp;
 }
 
-// Remove chars before head. charshead.
+// Remove chars before head.
 UnicodeString RemoveHead(UnicodeString body,UnicodeString head)
 {
 	UnicodeString temp = body;

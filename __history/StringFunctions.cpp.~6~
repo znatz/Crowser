@@ -73,20 +73,20 @@ UnicodeString AfterTail(UnicodeString body, UnicodeString tail)
 // Return str after head and before the Nth tail.
 UnicodeString WithinTails(UnicodeString body,UnicodeString head, UnicodeString tail, int tailIndex)
 {
+	int count= 0;
 	UnicodeString temp = body;
 	if (CountPart(body,tail)==0)
 	{
-		temp = body;
+		return body;
 	}
 	else if (CountPart(body,tail)==1)
 	{
-		temp = Within(body,head,tail);
+		return Within(body,head,tail);
 	 }
 	 else if (CountPart(body, tail)>1)
 	 {
-		temp = body.SubString(body.Pos(head)+head.Length(), Search(body,tail,tailIndex)-body.Pos(head)-head.Length() );
+		return body.SubString(body.Pos(head)+head.Length(), Search(body,tail,tailIndex)-body.Pos(head)-head.Length() );
 	  }
-	  return temp;
 }
 
 // Remove chars before head. charshead.

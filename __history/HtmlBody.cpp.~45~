@@ -1,6 +1,7 @@
 #pragma hdrstop
 
 #include "HtmlBody.h"
+#include "StringFunctions.h"
 
 HtmlBody::HtmlBody()
 {
@@ -34,52 +35,52 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
 
 	int tempPos;
-	UnicodeString friendBody;
+	UnicodeString frBody;
+	UnicodeString endTag;	// </ + tagname + >
 do
 	{
 		// Fill all fields
 		Root->RelatedPos   = cBody.Pos(Body);
 		Root->LStartPos    = Body.Pos("<");
 		Root->LEndPos      = Body.Pos(">");
-		Root->TagString	   = Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
+		Root->TagString	   = Within(Body,"<",">");
+
+		// Find name in tag
 		Root->NameEndPos   = Root->TagString.Pos(" ");
-		// Fill tag name
-		if (Root->NameEndPos == 0)
+		if (Root->NameEndPos == 0)     	   // <tagname>
 		{
 			Root->TagName  = Root->TagString;
 		}
-		else
+		else							   // <tagname para=val>
 		{
-			// TODO : Have to sovle this problem:  string string <tagname para> the space
-			// The lenght of the substring need NOT minus 1, becuase the "<"  has been removed before calculated.
-			Root->TagName  	= Root->TagString.SubString(1, Root->NameEndPos-1);
+			Root->TagName  = Within(Root->TagString,"<"," ");
 		}
-		// Find what is inside the tag
-		Root->RStartPos  = Body.Pos("</"+Root->TagName+">");
+		// Find string within the tag
+		endTag			 = "</"	+ Root->TagName + ">";
+		Root->RStartPos  = Body.Pos(endTag);
 		if (Root->RStartPos!=0)
 		{
 		  Root->REndPos	= Root->RStartPos + Root->TagName.Length() + 2;
 
-		  // !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means friendBody Existed
+		  // !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
 		  if (Root->REndPos < Body.Length())
 			{
-			  friendBody 	= Body.SubString(Root->REndPos+1,Body.Length()-Root->REndPos-1);
-			  if (friendBody.Pos("<")!=0)
+			  frBody   = AfterTail(Body,endTag);
+			  if (frBody.Pos("<")!=0)
 				{
-				  TAG *tempFriend = new TAG;
-				  tempFriend->Next=NULL;
-				  tempFriend->Friend=NULL;
-				  Destruct(tempFriend,friendBody);
-				  Root->Friend=tempFriend;
+				  TAG *newFd 	= new TAG;
+				  newFd->Next	= NULL;
+				  newFd->Friend	= NULL;
+				  Destruct(newFd,frBody);
+				  Root->Friend	= newFd;
 				}
 			}
-		  //_______________________________________________________________________________________
-			 Body 			= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
+			 Body	= Within(Body,Root->TagName,endTag);
 		}
 		else
 		{
 		  Root->RStartPos	= Body.Length();
-		  Body				= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
+		  Body	= AfterTail(Body,"<"+Root->TagString+">");
 		 }
 		 //________________________________
 
@@ -90,13 +91,13 @@ do
 		 if (Body.Pos("<")!=0)
 		 {
 			//Body 	= Body.SubString(Body.Pos("<"), tempPos-Body.Pos("<")-1);
-			Body 	= Body[Body.Pos("<")+1, tempPos-1];
+			Body = RemoveHead(Body,"<");
 		 // Link to next
-		 TAG	*tempList	= new TAG;
-		 tempList->Next		= NULL;
-		 tempList->Friend	= NULL;
-		 Root->Next		= tempList;
-		 Root			= tempList;
+		 TAG	*newRt	= new TAG;
+		 newRt->Next	= NULL;
+		 newRt->Friend	= NULL;
+		 Root->Next		= newRt;
+		 Root			= newRt;
          }
 
 	}while(Body.Pos("<")!=0);

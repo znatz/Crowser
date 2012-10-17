@@ -33,6 +33,8 @@ void HtmlBody::ExamBody()
 
 void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
+
+	int tempPos;
 	UnicodeString frBody;
 	UnicodeString endTag;	// </ + tagname + >
 do
@@ -41,7 +43,7 @@ do
 		Root->RelatedPos   = cBody.Pos(Body);
 		Root->LStartPos    = Body.Pos("<");
 		Root->LEndPos      = Body.Pos(">");
-		Root->TagString	   = Within(Body,"<",">");
+		Root->TagString	   = Within(Body,"<",">");  // ????? Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
 
 		// Find name in tag
 		Root->NameEndPos   = Root->TagString.Pos(" ");
@@ -58,7 +60,7 @@ do
 		Root->RStartPos  = Body.Pos(endTag);
 		if (Root->RStartPos!=0)
 		{
-		  Root->REndPos	= Root->RStartPos + endTag.Length();
+		  Root->REndPos	= Root->RStartPos + Root->TagName.Length() + 2;
 
 		  // !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
 		  if (Root->REndPos < Body.Length())
@@ -78,16 +80,17 @@ do
 		else
 		{
 		  Root->RStartPos	= Body.Length();
-		  Body	= AfterTail(Body,"<"+Root->TagString+">");
+		  Body	= AfterTail(Body,Root->TagName);
 		 }
 		 //________________________________
 
 
 		 //________________________________
 		 // Cut of the content before the <Tagname>
+		 tempPos 	= Body.Length();
 		 if (Body.Pos("<")!=0)
 		 {
-			Body = RemoveHead(Body,"<");
+			Body 	= Body.SubString(Body.Pos("<"), tempPos-Body.Pos("<")-1);
 		 // Link to next
 		 TAG	*newRt	= new TAG;
 		 newRt->Next	= NULL;

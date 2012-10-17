@@ -16,6 +16,7 @@
 //---------------------------------------------------------------------------
 #define DEFAULT_PORT "80"
 #define BUFFLEN 1024
+
 #pragma comment (lib, "ws2_32.lib")
 //---------------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ UnicodeString 	msg;
 UnicodeString 	filename;
 ResponseHeader 	RspHdr("");
 HtmlBody 		Content;
+TQueue* tagQ = new TQueue;
 
 void ConnectIt();
 void Report(int, UnicodeString);
@@ -171,48 +173,33 @@ if (RspHdr.cType==".html")
 	// Try to destruct body here
 //	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
 	Content.ExamBody();
-/*
-    	TAG *iterate;
-    	iterate=Content.bStruct;
-    	TAG *rootHolder[][];
-    	int preindex = 0;
-    	int index = 0;
-    	int level = 0;
-    	rootHolder[level][preindex]=iterate;
-    	do
-    	{
-    	   level++;
-    	   do {
-    	   rootHolder[level][index]=rootHolder[level-1][preindex]->Next;
-    	   index++;
-    	   rootHolder[level][index]=rootHolder[level-1][preindex]->Friend;
-    	   }while(preindex!=max);
-    	   index=0;
-    	}
-*/
+// !!!!!!!!!!!!!!!!!!!!!!!! TODO : Use Queue !!!!!!!!!!!!!!!!!!!!!!!
+tagQ->Push(Content.bStruct);
+TAG * tempHolder = NULL;
+do
+{
+	tempHolder = (TAG *) tagQ->Pop();
 
-    	TAG* iterate;
-    	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next)
-    	 {
-    		Report(0,"Inside " + iterate->TagName+" Tag: " + iterate->TagString);
-    		if (iterate->Friend!=NULL) {
-    			//Report(0,iterate->TagName+" has friend " + iterate->Friend->TagName);
-    			TAG* p;
-    			for (p=iterate->Friend; p!= NULL; p = p->Friend)
-    			{
-    				Report (0,"  Friend is " + p->TagName);
-    				TAG* ip;
-    				for (ip=p->Next; ip!=NULL; ip=ip->Next) {
-    					Report (0,"    Next is "+ ip->TagName);
-    					TAG* iq;
-    					for (iq=ip->Friend; iq!=NULL; iq=iq->Friend) {
-    						Report	(0, "          Subfriend is " + iq->TagName);
-    					}
-    				}
-    			}
-    		}
+	if (tempHolder!=NULL && tempHolder->TagName!=NULL )
+	{
+		Report(tempHolder->RelatedPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " RPos ");
+		if (tempHolder->Next!=NULL)
+		{
+			tagQ->Push(tempHolder->Next);
 		}
+		if (tempHolder->Friend!=NULL)
+		{
+			tagQ->Push(tempHolder->Friend);
+		}
+		if (tempHolder->Next==NULL && tempHolder->Friend==NULL)
+		{
+			Report(0,"Both NULL");
+		}
+	}
 
+} while(tagQ->Count()>0);
+
+//Report(0, "After execution "+Content.cBody);
 }
 
 // Save the content or not according to the type of the content
