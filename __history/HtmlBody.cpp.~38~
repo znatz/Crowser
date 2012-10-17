@@ -53,7 +53,7 @@ do
 		{
 			Root->TagName  	= Root->TagString.SubString(1, Root->NameEndPos-1);
 		}
-		// Find string within the tag
+		// Find what is inside the tag
 		Root->RStartPos  = Body.Pos("</"+Root->TagName+">");
 		if (Root->RStartPos!=0)
 		{
