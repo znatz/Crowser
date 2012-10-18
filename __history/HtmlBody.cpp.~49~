@@ -1,6 +1,7 @@
 #pragma hdrstop
 
 #include "HtmlBody.h"
+#include "StringFunctions.h"
 
 HtmlBody::HtmlBody()
 {
@@ -32,16 +33,18 @@ void HtmlBody::ExamBody()
 
 void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
-
-	int tempPos;
+	int duplicate = 0;
+	int count 	  = 1;
+	UnicodeString temp = "";
 	UnicodeString frBody;
+	UnicodeString endTag;	// </ + tagname + >
 do
 	{
 		// Fill all fields
 		Root->RelatedPos   = cBody.Pos(Body);
 		Root->LStartPos    = Body.Pos("<");
 		Root->LEndPos      = Body.Pos(">");
-		Root->TagString	   = Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
+		Root->TagString	   = Within(Body,"<",">");
 
 		// Find name in tag
 		Root->NameEndPos   = Root->TagString.Pos(" ");
@@ -51,18 +54,36 @@ do
 		}
 		else							   // <tagname para=val>
 		{
-			Root->TagName  	= Root->TagString.SubString(1, Root->NameEndPos-1);
+			Root->TagName  = Within(Root->TagString,"<"," ");
 		}
 		// Find string within the tag
-		Root->RStartPos  = Body.Pos("</"+Root->TagName+">");
-		if (Root->RStartPos!=0)
+		endTag			 = "</"	+ Root->TagName + ">";
+		Root->RStartPos  = Body.Pos(endTag);
+		if (Root->RStartPos!=0)          	// </tagname> existed
 		{
-		  Root->REndPos	= Root->RStartPos + Root->TagName.Length() + 2;
+			duplicate = CountPart(Body,"<"+Root->TagName);
+			while (count<=duplicate)   	// duplicate <tagname>
+			 {
+				 temp = WithinTails(Body,"<"+Root->TagName,"<"+Root->TagName,count);  // any </tagname> between <tagname> and <tagname>
+				 if (CountPart(temp,endTag)>= count)   // if <tagname </tagname> <tagname
+				 {
+					frBody = AfterTail(Body,endTag);   // Should be AfterNTails(Body,endTag,count).
+					TAG *newFd 	= new TAG;
+					newFd->Next	= NULL;
+					newFd->Friend	= NULL;
+					Destruct(newFd,frBody);
+					Root->Friend	= newFd;
+					Body = temp;
+				 }
+				 count++
+			 }
 
-		  // !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
+		  Root->REndPos	= Root->RStartPos + endTag.Length();
+
+		// !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
 		  if (Root->REndPos < Body.Length())
 			{
-			  frBody 	= Body.SubString(Root->REndPos+1,Body.Length()-Root->REndPos-1);
+			  frBody   = AfterTail(Body,endTag);
 			  if (frBody.Pos("<")!=0)
 				{
 				  TAG *newFd 	= new TAG;
@@ -72,23 +93,18 @@ do
 				  Root->Friend	= newFd;
 				}
 			}
-		  //_______________________________________________________________________________________
-			 Body 			= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
+			 Body	= Within(Body,Root->TagName,endTag);
 		}
 		else
 		{
 		  Root->RStartPos	= Body.Length();
-		  Body				= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
+		  Body	= AfterTail(Body,"<"+Root->TagString+">");
 		 }
-		 //________________________________
 
-
-		 //________________________________
 		 // Cut of the content before the <Tagname>
-		 tempPos 	= Body.Length();
 		 if (Body.Pos("<")!=0)
 		 {
-			Body 	= Body.SubString(Body.Pos("<"), tempPos-Body.Pos("<")-1);
+			Body = RemoveHead(Body,"<");
 		 // Link to next
 		 TAG	*newRt	= new TAG;
 		 newRt->Next	= NULL;

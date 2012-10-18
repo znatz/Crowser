@@ -11,7 +11,7 @@
 int Search(UnicodeString body, UnicodeString part,int index)
 {
 	UnicodeString bodyCopy = body;
-	int position 		   = 1;//body.Pos(part);
+	int position 		   = body.Pos(part);
 	int partL 			   = part.Length();
 	int posCopy			   = position;
 	int count			   = 0;

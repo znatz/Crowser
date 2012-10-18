@@ -33,8 +33,9 @@ void HtmlBody::ExamBody()
 
 void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
-
-	int tempPos;
+	int duplicate = 0;
+	int count 	  = 1;
+	UnicodeString temp = "";
 	UnicodeString frBody;
 	UnicodeString endTag;	// </ + tagname + >
 do
@@ -43,7 +44,7 @@ do
 		Root->RelatedPos   = cBody.Pos(Body);
 		Root->LStartPos    = Body.Pos("<");
 		Root->LEndPos      = Body.Pos(">");
-		Root->TagString	   = Body.SubString(Root->LStartPos+1,Root->LEndPos-Root->LStartPos-1);
+		Root->TagString	   = Within(Body,"<",">");
 
 		// Find name in tag
 		Root->NameEndPos   = Root->TagString.Pos(" ");
@@ -58,11 +59,49 @@ do
 		// Find string within the tag
 		endTag			 = "</"	+ Root->TagName + ">";
 		Root->RStartPos  = Body.Pos(endTag);
-		if (Root->RStartPos!=0)
+		if (Root->RStartPos!=0)          	// </tagname> existed
 		{
-		  Root->REndPos	= Root->RStartPos + Root->TagName.Length() + 2;
-
-		  // !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
+			duplicate = CountPart(Body,"<"+Root->TagName);
+			if (duplicate==1)                                  // 1 means no dupliate
+			{
+				if (EPos(Body,endTag)< Body.Length())
+				{
+					frBody	= AfterTail(Body,endTag);
+					TAG *newFd 	= new TAG;
+					newFd->Next	= NULL;
+					newFd->Friend	= NULL;
+					Destruct(newFd,frBody);
+					Root->Friend	= newFd;
+				}
+				Body = Within(Body,"<"+Root->TagString+">",endTag);
+			}
+			if (duplicate>1)            // duplicate <tagname>
+			{
+			while (count<=duplicate)
+			 {
+				 temp = WithinTails(Body,"<"+Root->TagName,"<"+Root->TagName,count);  // any </tagname> between <tagname> and <tagname>
+				 if (CountPart(temp,endTag)>= count)   // if <tagname </tagname> <tagname
+				 {
+					frBody = AfterNTail(Body,endTag,count);
+					TAG *newFd 	= new TAG;
+					newFd->Next	= NULL;
+					newFd->Friend	= NULL;
+					Destruct(newFd,frBody);
+					Root->Friend	= newFd;
+					Body = WithinTails(Body,"<"+Root->TagString+">",endTag,count);
+				 }
+				 count++;
+			 }
+			 count = 1;
+			 }
+		  }
+		  else if (Root->RStartPos==0) 		// </tagname> nonexisted
+		 {
+			   Body	= AfterTail(Body,"<"+Root->TagString+">");
+		  }
+		  Root->REndPos	= Root->RStartPos + endTag.Length();
+/*
+		// !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
 		  if (Root->REndPos < Body.Length())
 			{
 			  frBody   = AfterTail(Body,endTag);
@@ -80,17 +119,13 @@ do
 		else
 		{
 		  Root->RStartPos	= Body.Length();
-		  Body				= Body.SubString(Root->LEndPos+1,Root->RStartPos-Root->LEndPos-1);
+		  Body	= AfterTail(Body,"<"+Root->TagString+">");
 		 }
-		 //________________________________
-
-
-		 //________________________________
+*/
 		 // Cut of the content before the <Tagname>
-		 tempPos 	= Body.Length();
 		 if (Body.Pos("<")!=0)
 		 {
-			Body 	= Body.SubString(Body.Pos("<"), tempPos-Body.Pos("<")-1);
+			Body = RemoveHead(Body,"<");
 		 // Link to next
 		 TAG	*newRt	= new TAG;
 		 newRt->Next	= NULL;
@@ -112,7 +147,7 @@ Connection:close
 */
 
 /*
-    < : LS
+	< : LS
     > : LE
     space inside <> : NameEnd
     </: RS

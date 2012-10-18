@@ -35,7 +35,6 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
 	int duplicate = 0;
 	int count 	  = 1;
-	int index	  = 1;
 	UnicodeString temp = "";
 	UnicodeString frBody;
 	UnicodeString endTag;	// </ + tagname + >
@@ -78,29 +77,20 @@ do
 			}
 			if (duplicate>1)            // duplicate <tagname>
 			{
-			while (index<=duplicate)
+			while (count<=duplicate)
 			 {   // ??????
-				 temp = UnicodeString("<"+Root->TagName);
-				 temp = WithinTails(Body,temp,temp,index+1);  // any </tagname> between <tagname> and <tagname>
+				 temp = WithinTails(Body,"<"+Root->TagName,"<"+Root->TagName,count);  // any </tagname> between <tagname> and <tagname>
 				 if (CountPart(temp,endTag)>= count)   // if <tagname </tagname> <tagname
 				 {
-					frBody = AfterNTail(Body,endTag,CountPart(temp,endTag));
-					if (frBody!="\r\n")
-					{
-						TAG *newFd 	= new TAG;
-						newFd->Next	= NULL;
-						newFd->Friend	= NULL;
-						Destruct(newFd,frBody);
-						Root->Friend	= newFd;
-						Body = WithinTails(Body,"<"+Root->TagString+">",endTag,count);
-					}
+					frBody = AfterNTail(Body,endTag,count);
+					TAG *newFd 	= new TAG;
+					newFd->Next	= NULL;
+					newFd->Friend	= NULL;
+					Destruct(newFd,frBody);
+					Root->Friend	= newFd;
+					Body = WithinTails(Body,"<"+Root->TagString+">",endTag,count);
 				 }
-				 if (CountPart(temp,endTag)==0)
-				 {
-					count++;
-				 }
-				 else {count--;}
-				 index++;
+				 count++;
 			 }
 			 count = 1;
 			 }
@@ -109,9 +99,29 @@ do
 		 {
 			   Body	= AfterTail(Body,"<"+Root->TagString+">");
 		  }
-		 //___________________________________________________
-		 Root->REndPos	= Root->RStartPos + endTag.Length();
-
+		  Root->REndPos	= Root->RStartPos + endTag.Length();
+/*
+		// !!!!!!!! TODO: if Root->REndPos != _Body.length(); it means frBody Existed
+		  if (Root->REndPos < Body.Length())
+			{
+			  frBody   = AfterTail(Body,endTag);
+			  if (frBody.Pos("<")!=0)
+				{
+				  TAG *newFd 	= new TAG;
+				  newFd->Next	= NULL;
+				  newFd->Friend	= NULL;
+				  Destruct(newFd,frBody);
+				  Root->Friend	= newFd;
+				}
+			}
+			 Body	= Within(Body,Root->TagName,endTag);
+		}
+		else
+		{
+		  Root->RStartPos	= Body.Length();
+		  Body	= AfterTail(Body,"<"+Root->TagString+">");
+		 }
+*/
 		 // Cut of the content before the <Tagname>
 		 if (Body.Pos("<")!=0)
 		 {
