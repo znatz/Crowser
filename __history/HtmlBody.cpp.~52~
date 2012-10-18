@@ -34,10 +34,9 @@ void HtmlBody::ExamBody()
 void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
 	int duplicate = 0;
- //	int count 	  = 1;
+	int count 	  = 1;
 	int index	  = 1;
 	UnicodeString temp = "";
-	UnicodeString startTag="";
 	UnicodeString frBody;
 	UnicodeString endTag;	// </ + tagname + >
 do
@@ -81,28 +80,29 @@ do
 			{
 			while (index<=duplicate)
 			 {   // ??????
-				 startTag = UnicodeString("<"+Root->TagName);
-				 temp = WithinTails(Body,startTag,endTag,index);  // any <tagname> between <tagname> and </tagname>
-				 if (CountPart(temp,startTag)-CountPart(temp,endTag)>0)   // if <tagname <tagname </tagname>
+				 temp = UnicodeString("<"+Root->TagName);
+				 temp = WithinTails(Body,temp,temp,index+1);  // any </tagname> between <tagname> and <tagname>
+				 if (CountPart(temp,endTag)>= count)   // if <tagname </tagname> <tagname
 				 {
-					index++;
+					frBody = AfterNTail(Body,endTag,CountPart(temp,endTag));
+					if (frBody!="\r\n")
+					{
+						TAG *newFd 	= new TAG;
+						newFd->Next	= NULL;
+						newFd->Friend	= NULL;
+						Destruct(newFd,frBody);
+						Root->Friend	= newFd;
+						Body = WithinTails(Body,"<"+Root->TagString+">",endTag,count);
+					}
 				 }
-				 if  (CountPart(temp,startTag)-CountPart(temp,endTag)==0)
+				 if (CountPart(temp,endTag)==0)
 				 {
-					frBody = AfterNTail(Body,endTag,CountPart(temp,endTag)+1);
-							if (frBody!="\r\n")
-							{
-								TAG *newFd 	= new TAG;
-								newFd->Next	= NULL;
-								newFd->Friend	= NULL;
-								Destruct(newFd,frBody);
-								Root->Friend	= newFd;
-							}
-					Body = WithinTails(Body,"<"+Root->TagString+">",endTag,CountPart(temp,endTag)+1);
-
+					count++;
 				 }
+				 else {count--;}
+				 index++;
 			 }
-			// count = 1;
+			 count = 1;
 			 }
 		  }
 		  else if (Root->RStartPos==0) 		// </tagname> nonexisted
