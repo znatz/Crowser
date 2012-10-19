@@ -116,6 +116,10 @@
             <DependentOn>StringFunctions.h</DependentOn>
             <BuildOrder>8</BuildOrder>
         </CppCompile>
+        <CppCompile Include="temp.cpp">
+            <DependentOn>temp.h</DependentOn>
+            <BuildOrder>9</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Unit1.cpp">
             <Form>Fm</Form>
             <FormType>dfm</FormType>

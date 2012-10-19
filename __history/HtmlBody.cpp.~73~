@@ -44,7 +44,7 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 	int tagCount;
 	int endtagCount;
 
-	while(Body.Pos("<")&& Body!="")
+	while(Body.Pos("<"))
 	{
 		Body = RemoveHead(Body,"<");
 		Root->TagString	= Within(Body,"<",">");

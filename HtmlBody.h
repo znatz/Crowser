@@ -51,6 +51,23 @@ class HtmlBody
 		TStringStream* StrStr;
 		// Destruct body
 		void Destruct(TAG*, UnicodeString);
+		TAG *AddNode(UnicodeString);
 };
 #endif /* #ifndef Class1H */
 
+
+/*
+GET / HTTP/1.1
+Host:localhost
+Connection:close
+
+
+*/
+
+/*
+	< : LS
+    > : LE
+    space inside <> : NameEnd
+    </: RS
+    > : RE
+*/

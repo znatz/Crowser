@@ -44,19 +44,19 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 	int tagCount;
 	int endtagCount;
 
-	while(Body.Pos("<")&& Body!="")
+	while(Body.Pos("<"))
 	{
-		Body = RemoveHead(Body,"<");
+		RemoveHead(Body,"<");
 		Root->TagString	= Within(Body,"<",">");
 		// Find tag name
 		Root->NameEndPos = Root->TagString.Pos(" ");
-		if (Root->NameEndPos == 0 || Root->NameEndPos > Body.Pos(">"))
+		if (Root->NameEndPos==0)
 			{
-			Root->TagName = Root->TagString;
+			   Root->TagName = Within(Root->TagString,"<"," ");
 			}
-		else if (Root->NameEndPos<Body.Pos(">"))
+		else
 			{
-			   Root->TagName = Within("<"+Root->TagString,"<"," ");
+			   Root->TagName = Root->TagString;
 			}
 		//______________
 		UnicodeString endTag = "</" + Root->TagName + ">";
@@ -65,21 +65,14 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 		if (count == 0 ) 			// </tag> not existed
 			{
 				// whether < existed
-				if ( CountPart(Body,"<")<=1 ) 	   // < not existed
+				if ( CountPart(Body,"<")== 0 ) 	   // < not existed
 					 {
-						TAG	*endRode	= new TAG;
-						endRode->Next	= NULL;
-						endRode->Friend	= NULL;
-						Root->Next		= endRode;
-						Root			= endRode;
-						Body 			= "";
 						return;
 					 }
 				else       						   // < existed  , only friends existed
 					 {
 						frBody = AfterTail(Body,"<"+Root->TagString+">");
 						Root->Friend   = AddNode(frBody);
-						// FRIEND ONLY
 					 }
 			}
 		else if (count==1)			// </tag> existed once
@@ -87,7 +80,8 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				frBody = AfterTail(Body,endTag);
 				Root->Friend	= AddNode(frBody);
 				Body   = Within(Body,"<"+Root->TagString+">",endTag);
-				// FRIEND AND NEXT EXISTED
+				Root->Next		= AddNode(Body);
+				Root			= Root->Next;
 			}
 		else if (count>1)  			// </tag> existed more than one time
 			{
@@ -96,26 +90,23 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				 do
 				 {
 					index++;
-					temp = WithinTails(Body,"<"+Root->TagName,endTag,index);
+					temp = WithinTails(Body,"<"+Root->TagString+">",endTag,index);
 					tagCount = CountPart(temp,"<"+Root->TagName);
 					endtagCount = CountPart(temp,endTag);
 				  }	while(tagCount!=endtagCount);
 				  frBody = AfterNTail(Body,endTag,index);
 				  Root->Friend	=  AddNode(frBody);
-				  Body   = WithinTails(Body,"<"+Root->TagName+">",endTag,index);
-				  // FRIEND AND NEXT EXISTED
+				  Body   = temp;
+				  Root->Next	=  AddNode(Body);
+				  Root	 = Root->Next;
 			}
-		TAG	*endRode	= new TAG;
-		endRode->Next	= NULL;
-		endRode->Friend	= NULL;
-		Root->Next		= endRode;
-		Root			= endRode;
+
 	}
 }
 
 TAG * HtmlBody::AddNode(UnicodeString str)
 {
-	if (str=="" || str.Pos("<")==0)
+	if (str=="")
 	{
 		return NULL;
 	}

@@ -191,12 +191,6 @@ do
 		{
 			tagQ->Push(tempHolder->Friend);
 		}
-/*
-    		if (tempHolder->Next==NULL && tempHolder->Friend==NULL)
-    		{
-    			Report(0,"Both NULL");
-    		}
-*/
 	}
 
 } while(tagQ->Count()>0);

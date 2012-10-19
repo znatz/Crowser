@@ -1,7 +1,6 @@
 //---------------------------------------------------------------------------
 
-#pragma hdrstop
-
-#include "StringFunctions.h"
+#ifndef tempH
+#define tempH
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
+#endif

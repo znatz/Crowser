@@ -33,7 +33,7 @@ int CountPart(UnicodeString body,UnicodeString part)
 {
 	int count=0;
 	UnicodeString bodyCopy = body;
-	while (bodyCopy.Pos(part)!=0)            //!= should be deleted
+	while (bodyCopy.Pos(part)!=0)
 	{
 		 bodyCopy = bodyCopy.Delete(bodyCopy.Pos(part),part.Length());
 		 count++;
@@ -93,21 +93,14 @@ UnicodeString WithinTails(UnicodeString body,UnicodeString head, UnicodeString t
 UnicodeString RemoveHead(UnicodeString body,UnicodeString head)
 {
 	UnicodeString temp = body;
-	temp = temp.Delete(1, temp.Pos(head)-1);
-	return temp;
+	return temp.Delete(1, temp.Pos(head)-1);
 }
 
 // Remove chars after the Nth tail.
 UnicodeString AfterNTail(UnicodeString body, UnicodeString tail, int index)
 {
 	UnicodeString temp = body;
-	if (index==1)
-    {
-	   temp = AfterTail(temp,tail);
-	}
-
-
-	while(index>1)
+	while(index>=1)
 	{
 		temp = AfterTail(temp,tail);
 		index--;

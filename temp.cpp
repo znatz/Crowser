@@ -34,9 +34,10 @@ void HtmlBody::ExamBody()
 void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
 	int duplicate = 0;
-	int count 	  = 1;
+ //	int count 	  = 1;
 	int index	  = 1;
 	UnicodeString temp = "";
+	UnicodeString startTag="";
 	UnicodeString frBody;
 	UnicodeString endTag;	// </ + tagname + >
 do
@@ -80,29 +81,28 @@ do
 			{
 			while (index<=duplicate)
 			 {   // ??????
-				 temp = UnicodeString("<"+Root->TagName);
-				 temp = WithinTails(Body,temp,temp,index+1);  // any </tagname> between <tagname> and <tagname>
-				 if (CountPart(temp,endTag)>= count)   // if <tagname </tagname> <tagname
+				 startTag = UnicodeString("<"+Root->TagName);
+				 temp = WithinTails(Body,startTag,endTag,index);  // any <tagname> between <tagname> and </tagname>
+				 if (CountPart(temp,startTag)-CountPart(temp,endTag)>0)   // if <tagname <tagname </tagname>
 				 {
-					frBody = AfterNTail(Body,endTag,CountPart(temp,endTag));
-					if (frBody!="\r\n")
-					{
-						TAG *newFd 	= new TAG;
-						newFd->Next	= NULL;
-						newFd->Friend	= NULL;
-						Destruct(newFd,frBody);
-						Root->Friend	= newFd;
-						Body = WithinTails(Body,"<"+Root->TagString+">",endTag,count);
-					}
+					index++;
 				 }
-				 if (CountPart(temp,endTag)==0)
+				 if  (CountPart(temp,startTag)-CountPart(temp,endTag)==0)
 				 {
-					count++;
+					frBody = AfterNTail(Body,endTag,CountPart(temp,endTag)+1);
+							if (frBody!="\r\n")
+							{
+								TAG *newFd 	= new TAG;
+								newFd->Next	= NULL;
+								newFd->Friend	= NULL;
+								Destruct(newFd,frBody);
+								Root->Friend	= newFd;
+							}
+					Body = WithinTails(Body,"<"+Root->TagString+">",endTag,CountPart(temp,endTag)+1);
+
 				 }
-				 else {count--;}
-				 index++;
 			 }
-			 count = 1;
+			// count = 1;
 			 }
 		  }
 		  else if (Root->RStartPos==0) 		// </tagname> nonexisted
@@ -126,20 +126,3 @@ do
 
 	}while(Body.Pos("<")!=0);
 }
-
-
-/*
-GET / HTTP/1.1
-Host:localhost
-Connection:close
-
-
-*/
-
-/*
-	< : LS
-    > : LE
-    space inside <> : NameEnd
-    </: RS
-    > : RE
-*/

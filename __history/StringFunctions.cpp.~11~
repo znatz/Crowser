@@ -93,8 +93,7 @@ UnicodeString WithinTails(UnicodeString body,UnicodeString head, UnicodeString t
 UnicodeString RemoveHead(UnicodeString body,UnicodeString head)
 {
 	UnicodeString temp = body;
-	temp = temp.Delete(1, temp.Pos(head)-1);
-	return temp;
+	return temp.Delete(1, temp.Pos(head)-1);
 }
 
 // Remove chars after the Nth tail.
