@@ -28,6 +28,7 @@ void HtmlBody::ExamBody()
 	bStruct  		= new TAG;
 	bStruct->Next	= NULL;
 	bStruct->Friend	= NULL;
+	//Destruct(bStruct,cBody);
 	bStruct			= AddNode(cBody);
 	return;
 }
