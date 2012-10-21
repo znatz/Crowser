@@ -15,6 +15,7 @@ void HtmlBody::SetBody(char* buff, int startPos,int endPos)
 	StrStr->Write(&buff[startPos],endPos);
 	cBody = StrStr->DataString;
 	bodySize += endPos-startPos;
+
 }
 
 void HtmlBody::SaveToFile(UnicodeString fn)
@@ -33,13 +34,11 @@ void HtmlBody::ExamBody()
 
 void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
-/*
-    	if (Body.Pos("<")==0 || Body=="")
-    	{
-    		Root = NULL;
-    		return;
-    	}
-*/
+	if (Body.Pos("<")==0 || Body=="")
+	{
+		Root = NULL;
+		return;
+	}
 	UnicodeString frBody;
 	UnicodeString temp;
 	int tagCount;
@@ -68,13 +67,11 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				// whether < existed
 				if ( CountPart(Body,"<")<=1 ) 	   // < not existed
 					 {
-						                        /*
-                            TAG	*endRode	= new TAG;
-                            						endRode->Next	= NULL;
-                            						endRode->Friend	= NULL;
-                            						Root->Next		= endRode;
-                            						Root			= endRode;
-                        */
+						TAG	*endRode	= new TAG;
+						endRode->Next	= NULL;
+						endRode->Friend	= NULL;
+						Root->Next		= endRode;
+						Root			= endRode;
 						Body 			= "";
 						return;
 					 }

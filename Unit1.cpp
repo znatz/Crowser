@@ -32,6 +32,7 @@ TQueue* tagQ = new TQueue;
 
 void ConnectIt();
 void Report(int, UnicodeString);
+void ChangeREdit(int, int, UnicodeString);
 
 //---------------------------------------------------------------------------
 TFm *Fm;
@@ -160,18 +161,11 @@ void ConnectIt()
 
 if (RspHdr.cType==".html")
 {
-	/* Fill RichEdit with text.
-	   Select the necessary part.
-	   Change the selected part to what you want*/
-	Fm->BodyREdit->SelText=Content.cBody;
-	Fm->BodyREdit->SelStart = 100;
-	Fm->BodyREdit->SelLength = 300;
-	TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
-	textAttrib->Color = StringToColor(clBlue);
-	Fm->BodyREdit->SelAttributes = textAttrib;
+
 
 	// Try to destruct body here
 //	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
+	ChangeREdit(100,300,clBlue);
 	Content.ExamBody();
 // !!!!!!!!!!!!!!!!!!!!!!!! TODO : Use Queue !!!!!!!!!!!!!!!!!!!!!!!
 tagQ->Push(Content.bStruct);
@@ -231,5 +225,15 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 
+void ChangeREdit(int Start, int End, UnicodeString C)
+{
+		/* Fill RichEdit with text.
+	   Select the necessary part.
+	   Change the selected part to what you want*/
+	Fm->BodyREdit->SelText=Content.cBody;
+	Fm->BodyREdit->SelStart = Start;
+	Fm->BodyREdit->SelLength = End-Start-1;
+	Fm->BodyREdit->SelAttributes->Color = StringToColor(C);
+}
 
 //---------------------------------------------------------------------------

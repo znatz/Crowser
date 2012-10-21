@@ -32,6 +32,7 @@ TQueue* tagQ = new TQueue;
 
 void ConnectIt();
 void Report(int, UnicodeString);
+void ChangeREdit(int, int, UnicodeString);
 
 //---------------------------------------------------------------------------
 TFm *Fm;
@@ -160,47 +161,35 @@ void ConnectIt()
 
 if (RspHdr.cType==".html")
 {
-	/* Fill RichEdit with text.
-	   Select the necessary part.
-	   Change the selected part to what you want*/
-	Fm->BodyREdit->SelText=Content.cBody;
-	Fm->BodyREdit->SelStart = 100;
-	Fm->BodyREdit->SelLength = 300;
-	TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
-	textAttrib->Color = StringToColor(clBlue);
-	Fm->BodyREdit->SelAttributes = textAttrib;
+
 
 	// Try to destruct body here
 //	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
+	ChangeREdit(100,300,clBlue);
 	Content.ExamBody();
 // !!!!!!!!!!!!!!!!!!!!!!!! TODO : Use Queue !!!!!!!!!!!!!!!!!!!!!!!
-tagQ->Push(Content.bStruct->Next);
-TAG* tempTry;
-tempTry = (TAG *)tagQ->Peek();
-Report(tagQ->Count(),"Hey, I can access the queue now!" + tempTry->TagName);
-//__________________________________________________________________
-		TAG* iterate;
-    	for (iterate=Content.bStruct; iterate!=NULL; iterate=iterate->Next)
-    	 {
-    		Report(0,"Inside " + iterate->TagName+" Tag: " + iterate->TagString);
-    		if (iterate->Friend!=NULL) {
-    			//Report(0,iterate->TagName+" has friend " + iterate->Friend->TagName);
-    			TAG* p;
-    			for (p=iterate->Friend; p!= NULL; p = p->Friend)
-    			{
-    				Report (0,"  Friend is " + p->TagName);
-    				TAG* ip;
-    				for (ip=p->Next; ip!=NULL; ip=ip->Next) {
-    					Report (0,"    Next is "+ ip->TagName);
-    					TAG* iq;
-    					for (iq=ip->Friend; iq!=NULL; iq=iq->Friend) {
-    						Report	(0, "          Subfriend is " + iq->TagName);
-    					}
-    				}
-    			}
-    		}
-		}
+tagQ->Push(Content.bStruct);
+TAG * tempHolder = NULL;
+do
+{
+	tempHolder = (TAG *) tagQ->Pop();
 
+	if (tempHolder!=NULL && tempHolder->TagName!=NULL )
+	{
+		Report(tempHolder->RelatedPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " RPos ");
+		if (tempHolder->Next!=NULL)
+		{
+			tagQ->Push(tempHolder->Next);
+		}
+		if (tempHolder->Friend!=NULL)
+		{
+			tagQ->Push(tempHolder->Friend);
+		}
+	}
+
+} while(tagQ->Count()>0);
+
+//Report(0, "After execution "+Content.cBody);
 }
 
 // Save the content or not according to the type of the content
@@ -236,5 +225,15 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 
+void ChangeREdit(int Start, int Length, UnicodeString C)
+{
+		/* Fill RichEdit with text.
+	   Select the necessary part.
+	   Change the selected part to what you want*/
+	Fm->BodyREdit->SelText=Content.cBody;
+	Fm->BodyREdit->SelStart = Start;
+	Fm->BodyREdit->SelLength = Length;
+	Fm->BodyREdit->SelAttributes->Color = StringToColor(C);
+}
 
 //---------------------------------------------------------------------------

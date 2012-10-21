@@ -68,13 +68,11 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				// whether < existed
 				if ( CountPart(Body,"<")<=1 ) 	   // < not existed
 					 {
-						                        /*
-                            TAG	*endRode	= new TAG;
-                            						endRode->Next	= NULL;
-                            						endRode->Friend	= NULL;
-                            						Root->Next		= endRode;
-                            						Root			= endRode;
-                        */
+						TAG	*endRode	= new TAG;
+						endRode->Next	= NULL;
+						endRode->Friend	= NULL;
+						Root->Next		= endRode;
+						Root			= endRode;
 						Body 			= "";
 						return;
 					 }
