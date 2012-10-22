@@ -33,6 +33,13 @@ void HtmlBody::ExamBody()
 
 void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 {
+/*
+    	if (Body.Pos("<")==0 || Body=="")
+    	{
+    		Root = NULL;
+    		return;
+    	}
+*/
 	UnicodeString frBody;
 	UnicodeString temp;
 	int tagCount;
@@ -41,8 +48,6 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 	while(Body.Pos("<")> 0 && Body!="")
 	{
 		Body = RemoveHead(Body,"<");
-		// !!!                                       Something WRONG!!!
-		Root->LEndPos	= cBody.Pos(Body);
 		Root->TagString	= Within(Body,"<",">");
 		// Find tag name
 		Root->NameEndPos = Root->TagString.Pos(" ");
@@ -63,6 +68,13 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				// whether < existed
 				if ( CountPart(Body,"<")<=1 ) 	   // < not existed
 					 {
+						                        /*
+                            TAG	*endRode	= new TAG;
+                            						endRode->Next	= NULL;
+                            						endRode->Friend	= NULL;
+                            						Root->Next		= endRode;
+                            						Root			= endRode;
+                        */
 						Body 			= "";
 						return;
 					 }
@@ -111,8 +123,6 @@ TAG * HtmlBody::AddNode(UnicodeString str)
 		return NULL;
 	}
 	TAG *newNode 	= new TAG;
-	// !!!!!!!!!!!!!! TODO : the LEndPos is wrong.
-	//newNode->LEndPos	=	cBody.Pos(str)+ str.Pos(">")+1;
 	newNode->Next	= NULL;
 	newNode->Friend	= NULL;
 	Destruct(newNode,str);

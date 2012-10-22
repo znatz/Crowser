@@ -32,6 +32,7 @@ TQueue* tagQ = new TQueue;
 
 void ConnectIt();
 void Report(int, UnicodeString);
+void ChangeREdit(int, int, UnicodeString);
 
 //---------------------------------------------------------------------------
 TFm *Fm;
@@ -158,20 +159,10 @@ void ConnectIt()
 		WSACleanup();
 	};
 
+// Show all tags !!!!!!!!!!!!!!!!!!!!
 if (RspHdr.cType==".html")
 {
-	/* Fill RichEdit with text.
-	   Select the necessary part.
-	   Change the selected part to what you want*/
-	Fm->BodyREdit->SelText=Content.cBody;
-	Fm->BodyREdit->SelStart = 100;
-	Fm->BodyREdit->SelLength = 300;
-	TTextAttributes* textAttrib = Fm->BodyREdit->SelAttributes;
-	textAttrib->Color = StringToColor(clBlue);
-	Fm->BodyREdit->SelAttributes = textAttrib;
-
-	// Try to destruct body here
-//	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
+	ChangeREdit(100,300,clBlue);
 	Content.ExamBody();
 // !!!!!!!!!!!!!!!!!!!!!!!! TODO : Use Queue !!!!!!!!!!!!!!!!!!!!!!!
 tagQ->Push(Content.bStruct);
@@ -182,7 +173,8 @@ do
 
 	if (tempHolder!=NULL && tempHolder->TagName!=NULL )
 	{
-		Report(tempHolder->RelatedPos,"TAG: " + tempHolder->TagName+" HAS "+ tempHolder->TagString + " RPos ");
+		Report(tempHolder->LEndPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " LEndPos ");
+		//ChangeREdit(tempHolder->LEndPos,tempHolder->LEndPos+2,clBlue);
 		if (tempHolder->Next!=NULL)
 		{
 			tagQ->Push(tempHolder->Next);
@@ -191,15 +183,11 @@ do
 		{
 			tagQ->Push(tempHolder->Friend);
 		}
-		if (tempHolder->Next==NULL && tempHolder->Friend==NULL)
-		{
-			Report(0,"Both NULL");
-		}
 	}
 
 } while(tagQ->Count()>0);
 
-
+//Report(0, "After execution "+Content.cBody);
 }
 
 // Save the content or not according to the type of the content
@@ -235,5 +223,18 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 
+void ChangeREdit(int Start, int End, UnicodeString C)
+{
+		/* Fill RichEdit with text.
+	   Select the necessary part.
+	   Change the selected part to what you want*/
+	//Fm->BodyREdit->SelText=Content.cBody;
+	Fm->BodyREdit->SelStart  = Start;
+	Fm->BodyREdit->SelLength = End-Start-1;
+	Fm->BodyREdit->SelAttributes->Color = StringToColor(C);
+	Fm->BodyREdit->SetFocus();
+	//Fm->BodyREdit->SelStart = 0;
+	//Fm->BodyREdit->SelLength= 0;
+}
 
 //---------------------------------------------------------------------------

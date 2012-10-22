@@ -19,12 +19,12 @@ struct TAG
 	UnicodeString 	TagName;
 	UnicodeString 	TagString;
 	TAGPROPERTY     *TagPro;
-	int RelatedPos;
-	int LStartPos;
+	//int RelatedPos;
+	//int LStartPos;
 	int NameEndPos;
 	int LEndPos;
 	int RStartPos;
-	int REndPos;
+	//int REndPos;
 	TAG   			*Next;
 	TAG				*Friend;
 };
