@@ -159,13 +159,11 @@ void ConnectIt()
 		WSACleanup();
 	};
 
+// Show all tags !!!!!!!!!!!!!!!!!!!!
 if (RspHdr.cType==".html")
 {
-
-
-	// Try to destruct body here
-//	Report(4444,Content.bStruct->Next->Next->Friend->Next->TagName);
-	ChangeREdit(100,300,clBlue);
+	Fm->BodyREdit->Text = Content.cBody;
+	//ChangeREdit(100,300,clBlue);
 	Content.ExamBody();
 // !!!!!!!!!!!!!!!!!!!!!!!! TODO : Use Queue !!!!!!!!!!!!!!!!!!!!!!!
 tagQ->Push(Content.bStruct);
@@ -176,7 +174,8 @@ do
 
 	if (tempHolder!=NULL && tempHolder->TagName!=NULL )
 	{
-		Report(tempHolder->RelatedPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " RPos ");
+		Report(tempHolder->LEndPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " LEndPos ");
+		ChangeREdit(tempHolder->LEndPos,tempHolder->TagString.Length(),clBlue);
 		if (tempHolder->Next!=NULL)
 		{
 			tagQ->Push(tempHolder->Next);
@@ -188,6 +187,7 @@ do
 	}
 
 } while(tagQ->Count()>0);
+
 
 //Report(0, "After execution "+Content.cBody);
 }
@@ -225,14 +225,13 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 
-void ChangeREdit(int Start, int End, UnicodeString C)
+void ChangeREdit(int Start, int Length, UnicodeString C)
 {
 		/* Fill RichEdit with text.
 	   Select the necessary part.
 	   Change the selected part to what you want*/
-	Fm->BodyREdit->SelText=Content.cBody;
-	Fm->BodyREdit->SelStart = Start;
-	Fm->BodyREdit->SelLength = End-Start-1;
+	Fm->BodyREdit->SelStart  = Start;
+	Fm->BodyREdit->SelLength = Length;
 	Fm->BodyREdit->SelAttributes->Color = StringToColor(C);
 }
 

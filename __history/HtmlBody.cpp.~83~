@@ -42,16 +42,17 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 	{
 		Body = RemoveHead(Body,"<");
 		// !!!                                       Something WRONG!!!
+		Root->LEndPos	= cBody.Pos(Body);
 		Root->TagString	= Within(Body,"<",">");
 		// Find tag name
 		Root->NameEndPos = Root->TagString.Pos(" ");
 		if (Root->NameEndPos == 0 || Root->NameEndPos > Body.Pos(">"))
 			{
-				Root->TagName = Root->TagString;
+			Root->TagName = Root->TagString;
 			}
 		else if (Root->NameEndPos<Body.Pos(">"))
 			{
-				Root->TagName = Within("<"+Root->TagString,"<"," ");
+			   Root->TagName = Within("<"+Root->TagString,"<"," ");
 			}
 		//______________
 		UnicodeString endTag = "</" + Root->TagName + ">";
@@ -63,14 +64,12 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				if ( CountPart(Body,"<")<=1 ) 	   // < not existed
 					 {
 						Body 			= "";
-						//  NEED TO HANDLE LEND AND RSTART
 						return;
 					 }
 				else       						   // < existed  , only friends existed
 					 {
 						frBody = AfterTail(Body,"<"+Root->TagString+">");
 						Root->Friend   = AddNode(frBody);
-						//  NEED TO HANDLE LEND AND RSTART
 						return;
 						// FRIEND ONLY
 					 }
@@ -80,8 +79,6 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				frBody = AfterTail(Body,endTag);
 				Root->Friend	= AddNode(frBody);
 				Body   = Within(Body,"<"+Root->TagString+">",endTag);
-				Root->LEndPos	= cBody.Pos(Body); //
-				Root->RStartPos	= Body.Length();   //
 				Root->Next		= AddNode(Body);
 				return;
 				// FRIEND AND NEXT EXISTED
@@ -100,8 +97,6 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				  frBody = AfterNTail(Body,endTag,index);
 				  Root->Friend	=  AddNode(frBody);
 				  Body   = WithinTails(Body,"<"+Root->TagName+">",endTag,index);
-				  Root->LEndPos	= cBody.Pos(Body); //
-				  Root->RStartPos = Body.Length(); //
 				  Root->Next	=  AddNode(Body);
 				  return;
 				  // FRIEND AND NEXT EXISTED

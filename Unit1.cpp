@@ -34,6 +34,7 @@ void ConnectIt();
 void Report(int, UnicodeString);
 void ChangeREdit(int, int, UnicodeString);
 
+
 //---------------------------------------------------------------------------
 TFm *Fm;
 //---------------------------------------------------------------------------
@@ -175,7 +176,8 @@ do
 	if (tempHolder!=NULL && tempHolder->TagName!=NULL )
 	{
 		Report(tempHolder->LEndPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " LEndPos ");
-		ChangeREdit(tempHolder->LEndPos,tempHolder->TagString.Length(),clBlue);
+        // It does not work because the pop method pops both friends and next. should try next only first.
+		//ChangeREdit(tempHolder->LEndPos,tempHolder->RStartPos,clBlue);
 		if (tempHolder->Next!=NULL)
 		{
 			tagQ->Push(tempHolder->Next);
@@ -225,14 +227,22 @@ void __fastcall TFm::Button1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 
+
 void ChangeREdit(int Start, int Length, UnicodeString C)
 {
 		/* Fill RichEdit with text.
 	   Select the necessary part.
 	   Change the selected part to what you want*/
 	Fm->BodyREdit->SelStart  = Start;
-	Fm->BodyREdit->SelLength = Length;
-	Fm->BodyREdit->SelAttributes->Color = StringToColor(C);
+	Fm->BodyREdit->SelLength = Length-Start-1;
+	int RED;
+	int GREEN;
+	int BLUE;
+	RED=rand();
+	GREEN=rand();
+	BLUE=rand();
+
+	Fm->BodyREdit->SelAttributes->Color = TColor(RGB(RED,GREEN,BLUE));//TColor(RGB(0x18,0x55,0x25)); //StringToColor(C);//ToColor(C);
 }
 
 //---------------------------------------------------------------------------
