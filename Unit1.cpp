@@ -177,7 +177,7 @@ do
 	{
 		Report(tempHolder->LEndPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " LEndPos ");
         // It does not work because the pop method pops both friends and next. should try next only first.
-		//ChangeREdit(tempHolder->LEndPos,tempHolder->RStartPos,clBlue);
+		ChangeREdit(tempHolder->LEndPos,tempHolder->RStartPos,clBlue);
 		if (tempHolder->Next!=NULL)
 		{
 			tagQ->Push(tempHolder->Next);

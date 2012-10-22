@@ -62,17 +62,15 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				// whether < existed
 				if ( CountPart(Body,"<")<=1 ) 	   // < not existed
 					 {
-						Root->LEndPos   = Body.Pos(">")+1; 	 //
-						Root->RStartPos = Body.Length();	 //
 						Body 			= "";
+						//  NEED TO HANDLE LEND AND RSTART
 						return;
 					 }
 				else       						   // < existed  , only friends existed
 					 {
 						frBody = AfterTail(Body,"<"+Root->TagString+">");
 						Root->Friend   = AddNode(frBody);
-						Root->LEndPos  = Body.Pos(">")+1;      	//
-						Root->RStartPos = Search(Body,"<",2)-1; //
+						//  NEED TO HANDLE LEND AND RSTART
 						return;
 						// FRIEND ONLY
 					 }
@@ -82,8 +80,8 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				frBody = AfterTail(Body,endTag);
 				Root->Friend	= AddNode(frBody);
 				Body   = Within(Body,"<"+Root->TagString+">",endTag);
-				Root->LEndPos	= EPos(cBody,"<"+Root->TagString+">") + 1; //
-				Root->RStartPos	= cBody.Pos(endTag)-1;   //
+				Root->LEndPos	= cBody.Pos(Body); //
+				Root->RStartPos	= Body.Length();   //
 				Root->Next		= AddNode(Body);
 				return;
 				// FRIEND AND NEXT EXISTED
