@@ -177,7 +177,8 @@ do
 	{
 		Report(tempHolder->LEndPos,tempHolder->TagName+" HAS "+ tempHolder->TagString + " LEndPos ");
         // It does not work because the pop method pops both friends and next. should try next only first.
-		ChangeREdit(tempHolder->LEndPos,tempHolder->RStartPos,clBlue);
+		// ChangeREdit(tempHolder->LEndPos,tempHolder->RStartPos,clBlue);
+		ChangeREdit(tempHolder->LEndPos,tempHolder->LEndPos+10,clBlue); // test leftendpos
 		if (tempHolder->Next!=NULL)
 		{
 			tagQ->Push(tempHolder->Next);
@@ -238,9 +239,9 @@ void ChangeREdit(int Start, int Length, UnicodeString C)
 	int RED;
 	int GREEN;
 	int BLUE;
-	RED=rand();
-	GREEN=rand();
-	BLUE=rand();
+	RED=Random()* 255;
+	GREEN=0;//Random()*255;
+	BLUE=0;//Random()*255;
 
 	Fm->BodyREdit->SelAttributes->Color = TColor(RGB(RED,GREEN,BLUE));//TColor(RGB(0x18,0x55,0x25)); //StringToColor(C);//ToColor(C);
 }

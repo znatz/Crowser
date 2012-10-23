@@ -103,7 +103,7 @@ void HtmlBody::Destruct(TAG* Root, UnicodeString Body)
 				  Root->Friend	=  AddNode(frBody);
 				  Body   = WithinTails(Body,"<"+Root->TagName+">",endTag,index);
 				  Root->LEndPos	= cBody.Pos(Body); //
-				  Root->RStartPos = Body.Length(); //
+				  Root->RStartPos = Body.Length()+ cBody.Pos(Body); //
 				  Root->Next	=  AddNode(Body);
 				  return;
 				  // FRIEND AND NEXT EXISTED
